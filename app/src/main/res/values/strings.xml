@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CriminalIntent</string>
+
+    <string name="crime_title_hint">Enter a Hint for the crime</string>
+    <string name="crime_title_label">Enter a Lable for the crime</string>
+    <string name="crime_details_label">Enter the Details for the crime</string>
+    <string name="crime_solved_label">Is the crime solved</string>
+
+</resources>
