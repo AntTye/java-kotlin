@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GeoQuiz</string>
+    <string name="robot_turn">Robot Turn</string>
+    
+    <string name="robot_red_large">Red Robot\'s Turn</string>
+    <string name="robot_white_large">White Robot\'s Turn</string>
+    <string name="robot_yellow_large">Yellow Robot\'s Turn</string>
 </resources>
