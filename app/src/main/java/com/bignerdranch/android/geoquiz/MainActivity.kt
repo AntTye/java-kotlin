@@ -62,12 +62,14 @@ class MainActivity : ComponentActivity(){
         rot_counter=findViewById(R.id.rot_counter)
         robotImages = mutableListOf(red_img, white_img, yellow_img)
 
-
+        robotViewModel.turnCount = 1    //Initial starting robot is red
+                                        //rot_clock go to yellow, rot_counter go to white
         red_img.setOnClickListener { view : View ->
             Toast.makeText(this, "Turn: ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
         }
 
-        rot_counter.setOnClickListener { advanceTurn() }
+        rot_clock.setOnClickListener    { advanceTurn(true) }
+        rot_counter.setOnClickListener  { advanceTurn(false) }
 
         if (savedInstanceState != null) { // Restores turn count if available
             val savedCount = savedInstanceState.getInt("turnCount", 0)
@@ -76,11 +78,9 @@ class MainActivity : ComponentActivity(){
 
     }
 
-    private fun advanceTurn(){
-        robotViewModel.turnCount += 1
-        if(robotViewModel.turnCount > 3 ){
-            robotViewModel.turnCount = 1
-        }
+    private fun advanceTurn(clockwise: Boolean) {
+        val increment = if (clockwise) -1 else 1
+        robotViewModel.turnCount = (robotViewModel.turnCount + increment + 2) % 3 + 1
         setRobotTurn()
         setImages()
     }
