@@ -30,8 +30,11 @@ class MainActivity : ComponentActivity(){
     private lateinit var yellow_img : ImageView
     private lateinit var rot_clock  : ImageView
     private lateinit var rot_counter: ImageView
-    private lateinit var message_box: TextView
+
     private lateinit var robotImages: MutableList<ImageView>
+
+    private lateinit var message_box: TextView
+    private lateinit var purchase_box:TextView
 
     private val robots = listOf(
         Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
@@ -42,7 +45,6 @@ class MainActivity : ComponentActivity(){
         R.string.robot_red_large,
         R.string.robot_white_large,
         R.string.robot_yellow_large
-        // Add more resource IDs as needed
     )
     private val robotViewModel : RobotViewModel by viewModels()
 
@@ -57,10 +59,12 @@ class MainActivity : ComponentActivity(){
         red_img   = findViewById(R.id.robot_red_large)
         white_img = findViewById(R.id.robot_white_large)
         yellow_img= findViewById(R.id.robot_yellow_large)
-        message_box=findViewById(R.id.robot_turn)
         rot_clock = findViewById(R.id.rot_clock)
         rot_counter=findViewById(R.id.rot_counter)
         robotImages = mutableListOf(red_img, white_img, yellow_img)
+
+        message_box=findViewById (R.id.robot_turn)
+        purchase_box=findViewById(R.id.make_purchase)
 
         robotViewModel.turnCount = 1    //Initial starting robot is red
                                         //rot_clock go to yellow, rot_counter go to white
@@ -75,7 +79,6 @@ class MainActivity : ComponentActivity(){
             val savedCount = savedInstanceState.getInt("turnCount", 0)
             robotViewModel.turnCount = savedCount
         }
-
     }
 
     private fun advanceTurn(clockwise: Boolean) {
