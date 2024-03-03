@@ -11,5 +11,4 @@ class RobotViewModel : ViewModel() {
         get () = _turnCount
         set(value) {_turnCount = value}
 
-
 }
