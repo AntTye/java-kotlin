@@ -11,4 +11,19 @@ class RobotViewModel : ViewModel() {
         get () = _turnCount
         set(value) {_turnCount = value}
 
+    private var _redEnergy = 0
+    var redEnergy : Int
+        get () = _redEnergy
+        set(value) {_redEnergy = value}
+
+    private var _whiteEnergy = 0
+    var whiteEnergy : Int
+        get () = _whiteEnergy
+        set(value) {_whiteEnergy = value}
+
+    private var _yellowEnergy = 0
+    var yellowEnergy : Int
+        get () = _yellowEnergy
+        set(value) {_yellowEnergy = value}
+
 }

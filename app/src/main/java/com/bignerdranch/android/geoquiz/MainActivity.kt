@@ -7,21 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleRegistry
 import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
-import com.bignerdranch.android.geoquiz.ui.theme.GeoQuizTheme
 
 private const val TAG = "MainActivity"
+private const val EXTRA_ROBOT_ENERGY = "com.bignerdranch.android.geoquiz.current_robot_energy"
 
 class MainActivity : ComponentActivity(){
 
@@ -69,11 +59,33 @@ class MainActivity : ComponentActivity(){
         robotViewModel.turnCount = 1    //Initial starting robot is red
                                         //rot_clock go to yellow, rot_counter go to white
         red_img.setOnClickListener { view : View ->
-            Toast.makeText(this, "Turn: ${robotViewModel.turnCount}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Red Energy: ${robotViewModel.redEnergy}", Toast.LENGTH_SHORT).show()
+        }
+        white_img.setOnClickListener { view : View ->
+            Toast.makeText(this, "White Energy: ${robotViewModel.whiteEnergy}", Toast.LENGTH_SHORT).show()
+        }
+        yellow_img.setOnClickListener { view : View ->
+            Toast.makeText(this, "Yellow Energy: ${robotViewModel.yellowEnergy}", Toast.LENGTH_SHORT).show()
         }
 
         rot_clock.setOnClickListener    { advanceTurn(true) }
         rot_counter.setOnClickListener  { advanceTurn(false) }
+
+        purchase_box.setOnClickListener {
+            if (robotViewModel.turnCount ==1) {
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.turnCount)
+                startActivity(intent)
+            }else if (robotViewModel.turnCount ==2){
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.whiteEnergy, robotViewModel.turnCount)
+                startActivity(intent)
+            }else if(robotViewModel.turnCount ==3){
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                startActivity(intent)
+            }else{
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.turnCount)
+                startActivity(intent)
+            }
+        }
 
         if (savedInstanceState != null) { // Restores turn count if available
             val savedCount = savedInstanceState.getInt("turnCount", 0)
@@ -84,6 +96,14 @@ class MainActivity : ComponentActivity(){
     private fun advanceTurn(clockwise: Boolean) {
         val increment = if (clockwise) -1 else 1
         robotViewModel.turnCount = (robotViewModel.turnCount + increment + 2) % 3 + 1
+
+        if (robotViewModel.turnCount == 1){
+            robotViewModel.redEnergy++
+        }else if (robotViewModel.turnCount == 2){
+            robotViewModel.whiteEnergy++
+        }else{
+            robotViewModel.yellowEnergy++
+        }
         setRobotTurn()
         setImages()
     }
