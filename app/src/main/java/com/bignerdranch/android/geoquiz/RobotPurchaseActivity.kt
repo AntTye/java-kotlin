@@ -26,6 +26,8 @@ class RobotPurchaseActivity : ComponentActivity() {
 
     private var robotTurn: Int = 0
     private var energyValue: Int = 0
+    private val purchasedRewards = mutableListOf<Int>()
+    private var lastPurchase: String = ""
 
     companion object {
         fun newIntent(packageContext: Context, robotEnergy: Int, robotTurn: Int): Intent {
@@ -55,11 +57,29 @@ class RobotPurchaseActivity : ComponentActivity() {
 
         setRobotTurn()
 
-        reward_a.setOnClickListener { view: View ->
-            Toast.makeText(this, "Turn Count: ${energyValue}", Toast.LENGTH_SHORT).show()
-        }
+        reward_a.setOnClickListener { makePurchase(1) }
+        reward_b.setOnClickListener { makePurchase(2) }
+        reward_c.setOnClickListener { makePurchase(3) }
+        reward_d.setOnClickListener { makePurchase(3) }
+        reward_e.setOnClickListener { makePurchase(4) }
+        reward_f.setOnClickListener { makePurchase(4) }
+        reward_g.setOnClickListener { makePurchase(7) }
 
     }
+
+        private fun makePurchase(costOfPurchase : Int){
+            val rewards = listOf(R.string.reward_a,R.string.reward_b,R.string.reward_c,R.string.reward_d,R.string.reward_f,R.string.reward_g,R.string.random_reward)
+            if(energyValue >= costOfPurchase){
+                val s1 = getString(rewards[costOfPurchase - 1])
+                val s2 = "$s1 purchased"
+                energyValue -= costOfPurchase
+                energy_amount.setText(energyValue.toString())
+                Toast.makeText(this, s2, Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Insufficient", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
     private fun setRobotTurn() {
         if (robotTurn == 1) {
