@@ -1,5 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,7 +13,7 @@ import androidx.activity.viewModels
 import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
-private const val EXTRA_ROBOT_ENERGY = "com.bignerdranch.android.geoquiz.current_robot_energy"
+private const val EXTRA_ROBOT_ENERGY_NEW = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW"
 
 class MainActivity : ComponentActivity(){
 
@@ -37,6 +39,14 @@ class MainActivity : ComponentActivity(){
         R.string.robot_yellow_large
     )
     private val robotViewModel : RobotViewModel by viewModels()
+
+    companion object {
+        fun newIntent(packageContext: Context, newrobotEnergy: Int): Intent {
+            return Intent(packageContext, MainActivity::class.java).apply {
+                putExtra(EXTRA_ROBOT_ENERGY_NEW, newrobotEnergy)
+            }
+        }
+    }
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
