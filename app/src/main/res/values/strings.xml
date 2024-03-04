@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GeoQuiz</string>
-    <string name="robot_turn">Robot Turn</string>
+    <string name="robot_turn">Start</string>
     <string name="make_purchase">Make A Purchase</string>
 
     <string name="robot_red_large">Red Robot\'s Turn</string>
