@@ -1,8 +1,10 @@
 package com.bignerdranch.android.geoquiz
 
+import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 
 private const val TAG = "RobotViewModel"
+
 
 class RobotViewModel : ViewModel() {
 
@@ -25,5 +27,7 @@ class RobotViewModel : ViewModel() {
     var yellowEnergy : Int
         get () = _yellowEnergy
         set(value) {_yellowEnergy = value}
+
+
 
 }

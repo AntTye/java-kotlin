@@ -13,7 +13,14 @@ import androidx.activity.viewModels
 import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
-private const val EXTRA_ROBOT_ENERGY_NEW = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW"
+private const val EXTRA_ROBOT_ENERGY_NEW_RED = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_RED"
+private const val EXTRA_ROBOT_ENERGY_NEW_WHITE = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_WHITE"
+private const val EXTRA_ROBOT_ENERGY_NEW_YELLOW = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_YELLOW"
+private const val EXTRA_ROBOT_ENERGY_NEW_TURN = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_TURN"
+
+//private const val EXTRA_ROBOT_TURN = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW"
+
+//I want to save newrobotenergy into the robot turncount was on.
 
 class MainActivity : ComponentActivity(){
 
@@ -23,10 +30,15 @@ class MainActivity : ComponentActivity(){
     private lateinit var rot_clock  : ImageView
     private lateinit var rot_counter: ImageView
 
+    private var newRobotEnergy_Red : Int = 0
+    private var newRobotEnergy_White : Int = 0
+    private var newRobotEnergy_Yellow : Int = 0
+    private var newRobotTurn : Int = 0
+
     private lateinit var robotImages: MutableList<ImageView>
 
     private lateinit var message_box: TextView
-    private lateinit var purchase_box:TextView
+    private lateinit var purchaseBox:TextView
 
     private val robots = listOf(
         Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
@@ -41,9 +53,12 @@ class MainActivity : ComponentActivity(){
     private val robotViewModel : RobotViewModel by viewModels()
 
     companion object {
-        fun newIntent(packageContext: Context, newrobotEnergy: Int): Intent {
+        fun newIntent(packageContext: Context, newRobotEnergy_Red : Int, newRobotEnergy_White : Int,newRobotEnergy_Yellow : Int, newRobotTurn : Int): Intent {
             return Intent(packageContext, MainActivity::class.java).apply {
-                putExtra(EXTRA_ROBOT_ENERGY_NEW, newrobotEnergy)
+                putExtra(EXTRA_ROBOT_ENERGY_NEW_RED, newRobotEnergy_Red)
+                putExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, newRobotEnergy_White)
+                putExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, newRobotEnergy_Yellow)
+                putExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, newRobotTurn)
             }
         }
     }
@@ -64,10 +79,18 @@ class MainActivity : ComponentActivity(){
         robotImages = mutableListOf(red_img, white_img, yellow_img)
 
         message_box=findViewById (R.id.robot_turn)
-        purchase_box=findViewById(R.id.make_purchase)
+        purchaseBox=findViewById(R.id.make_purchase)
 
-        robotViewModel.turnCount = 1    //Initial starting robot is red
-                                        //rot_clock go to yellow, rot_counter go to white
+        newRobotEnergy_Red = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_RED, 0)
+        newRobotEnergy_White = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, 0)
+        newRobotEnergy_Yellow = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, 0)
+        newRobotTurn = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, 0)
+
+        robotViewModel.redEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_RED, 0)
+        robotViewModel.whiteEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, 0)
+        robotViewModel.yellowEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, 0)
+        robotViewModel.turnCount = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, 0)
+
         red_img.setOnClickListener { view : View ->
             Toast.makeText(this, "Red Energy: ${robotViewModel.redEnergy}", Toast.LENGTH_SHORT).show()
         }
@@ -81,21 +104,32 @@ class MainActivity : ComponentActivity(){
         rot_clock.setOnClickListener    { advanceTurn(true) }
         rot_counter.setOnClickListener  { advanceTurn(false) }
 
-        purchase_box.setOnClickListener {
+        purchaseBox.setOnClickListener {
             if (robotViewModel.turnCount ==1) {
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.turnCount)
+                //robotViewModel.redEnergy = newRobotEnergy
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
                 startActivity(intent)
+
             }else if (robotViewModel.turnCount ==2){
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.whiteEnergy, robotViewModel.turnCount)
+                //robotViewModel.whiteEnergy = newRobotEnergy
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
                 startActivity(intent)
+
             }else if(robotViewModel.turnCount ==3){
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                //robotViewModel.whiteEnergy = newRobotEnergy
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
                 startActivity(intent)
+
             }else{
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.turnCount)
+                robotViewModel.redEnergy = newRobotEnergy_Red
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
                 startActivity(intent)
             }
         }
+
+        setRobotTurn()
+        setImages()
+
 
         if (savedInstanceState != null) { // Restores turn count if available
             val savedCount = savedInstanceState.getInt("turnCount", 0)
@@ -119,11 +153,21 @@ class MainActivity : ComponentActivity(){
     }
 
     private fun setRobotTurn(){
-        for(robot in robots){
-            robot.myTurn = false
+        if (robotViewModel.turnCount ==0) {
+            for (robot in robots) {
+                robot.myTurn = false
+            }
+            robots[robotViewModel.turnCount].myTurn = true
+        }else{
+            for(robot in robots){
+                robot.myTurn = false
+            }
+            robots[robotViewModel.turnCount-1].myTurn = true
         }
-        robots[robotViewModel.turnCount-1].myTurn = true
     }
+
+
+
     private fun setImages() {
         var indy = 0
         while (indy < robotImages.size && indy < robots.size) {
