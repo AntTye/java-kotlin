@@ -16,4 +16,7 @@
     <string name="reward_f">Reward F</string>
     <string name="reward_g">Reward G</string>
     <string name="random_reward">Random Reward A-G</string>
+
+    <string name="reset_all">Reset All</string>
+    <string name="reset_rewards">Reset Purchased Rewards</string>
 </resources>
