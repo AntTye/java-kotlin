@@ -166,7 +166,7 @@ class RobotPurchaseActivity : ComponentActivity() {
     }
 
     private fun setRobotTurn() {
-        if (robotTurn == 1) {
+        if ((robotTurn == 1) or (robotTurn == 0)) {
             energy_robot.setImageResource(R.drawable.robot_red_large)
             energy_amount.text = robotEnergy_Red.toString()
         }else if (robotTurn == 2){
@@ -175,7 +175,7 @@ class RobotPurchaseActivity : ComponentActivity() {
         }else if (robotTurn == 3){
             energy_robot.setImageResource(R.drawable.robot_yellow_large)
             energy_amount.text = robotEnergy_Yellow.toString()
-        } else {
+        } else if (robotTurn == 0){
             energy_robot.setImageResource(R.drawable.robot_red_large)
             energy_amount.text = robotEnergy_Red.toString()
         }

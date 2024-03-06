@@ -21,23 +21,25 @@ private const val EXTRA_ROBOT_PURCHASED_REWARDS = "com.bignerdranch.android.geoq
 
 class MainActivity : ComponentActivity(){
 
-    private lateinit var red_img    : ImageView
-    private lateinit var white_img  : ImageView
-    private lateinit var yellow_img : ImageView
-    private lateinit var rot_clock  : ImageView
-    private lateinit var rot_counter: ImageView
+    private lateinit var red_img            : ImageView
+    private lateinit var white_img          : ImageView
+    private lateinit var yellow_img         : ImageView
+    private lateinit var rot_clock          : ImageView
+    private lateinit var rot_counter        : ImageView
 
-    private var newRobotEnergy_Red : Int = 0
-    private var newRobotEnergy_White : Int = 0
-    private var newRobotEnergy_Yellow : Int = 0
-    private var newRobotTurn : Int = 0
+    private var newRobotEnergy_Red          : Int = 0
+    private var newRobotEnergy_White        : Int = 0
+    private var newRobotEnergy_Yellow       : Int = 0
+    private var newRobotTurn                : Int = 0
 
-    private lateinit var newPurchasedRewards : MutableList<Int>
+    private lateinit var newPurchasedRewards: MutableList<Int>
 
-    private lateinit var robotImages: MutableList<ImageView>
+    private lateinit var robotImages        : MutableList<ImageView>
 
-    private lateinit var message_box: TextView
-    private lateinit var purchaseBox:TextView
+    private lateinit var message_box        : TextView
+    private lateinit var purchaseBox        : TextView
+    private lateinit var reset_all          : TextView
+    private lateinit var reset_purchase     : TextView
 
     private val robots = listOf(
         Robot(false, R.drawable.robot_red_large, R.drawable.robot_red_small),
@@ -73,15 +75,18 @@ class MainActivity : ComponentActivity(){
 
         Log.d(TAG, "got a robotViewModel @: $robotViewModel")
 
-        red_img   = findViewById(R.id.robot_red_large)
-        white_img = findViewById(R.id.robot_white_large)
-        yellow_img= findViewById(R.id.robot_yellow_large)
-        rot_clock = findViewById(R.id.rot_clock)
-        rot_counter=findViewById(R.id.rot_counter)
+        red_img     = findViewById(R.id.robot_red_large)
+        white_img   = findViewById(R.id.robot_white_large)
+        yellow_img  = findViewById(R.id.robot_yellow_large)
+        rot_clock   = findViewById(R.id.rot_clock)
+        rot_counter = findViewById(R.id.rot_counter)
         robotImages = mutableListOf(red_img, white_img, yellow_img)
 
-        message_box=findViewById (R.id.robot_turn)
-        purchaseBox=findViewById(R.id.make_purchase)
+        message_box = findViewById (R.id.robot_turn)
+        purchaseBox = findViewById(R.id.make_purchase)
+
+        reset_purchase  = findViewById(R.id.reset_rewards)
+        reset_all       = findViewById(R.id.reset_all)
 
         newRobotEnergy_Red = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_RED, 0)
         newRobotEnergy_White = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, 0)
@@ -128,9 +133,17 @@ class MainActivity : ComponentActivity(){
             }
         }
 
+        reset_all.setOnClickListener { resetValues(0)
+            Toast.makeText(this, "Everything have been reset", Toast.LENGTH_SHORT).show()}
+
+        reset_purchase.setOnClickListener { resetValues(1)
+            Toast.makeText(this, "Purchased Rewards have been reset", Toast.LENGTH_SHORT).show()}
+
+        if (robotViewModel.turnCount == 0){
+            resetValues(0)
+        }
         setRobotTurn()
         setImages()
-
 
         if (savedInstanceState != null) {
             val savedCount = savedInstanceState.getInt("turnCount", 0)
@@ -152,7 +165,6 @@ class MainActivity : ComponentActivity(){
         }else if (robotViewModel.turnCount == 3) {
             robotViewModel.yellowEnergy++
         }
-
         setRobotTurn()
         setImages()
     }
@@ -172,8 +184,6 @@ class MainActivity : ComponentActivity(){
         }
     }
 
-
-
     private fun setImages() {
         var indy = 0
         while (indy < robotImages.size && indy < robots.size) {
@@ -186,6 +196,23 @@ class MainActivity : ComponentActivity(){
                 robotImages[indy].setImageResource(robots[indy].smallImgRes)
             }
             indy++
+        }
+    }
+
+    private fun resetValues(resets: Int) {
+        if (resets == 0){
+            robotViewModel.turnCount = 1
+            robotViewModel.redEnergy = 1
+            robotViewModel.whiteEnergy = 0
+            robotViewModel.yellowEnergy = 0
+            robotViewModel.purchasedRewards = mutableListOf<Int>()
+
+            setRobotTurn()
+            setImages()
+        } else if (resets == 1) {
+            robotViewModel.purchasedRewards = mutableListOf<Int>()
+            setRobotTurn()
+            setImages()
         }
     }
 
