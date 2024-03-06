@@ -138,6 +138,9 @@ class MainActivity : ComponentActivity(){
     }
 
     private fun advanceTurn(clockwise: Boolean) {
+        if (robotViewModel.turnCount ==0){
+            robotViewModel.turnCount = 1
+        }
         val increment = if (clockwise) -1 else 1
         robotViewModel.turnCount = (robotViewModel.turnCount + increment + 2) % 3 + 1
 
@@ -145,9 +148,10 @@ class MainActivity : ComponentActivity(){
             robotViewModel.redEnergy++
         }else if (robotViewModel.turnCount == 2){
             robotViewModel.whiteEnergy++
-        }else{
+        }else if (robotViewModel.turnCount == 3) {
             robotViewModel.yellowEnergy++
         }
+
         setRobotTurn()
         setImages()
     }
@@ -158,6 +162,7 @@ class MainActivity : ComponentActivity(){
                 robot.myTurn = false
             }
             robots[robotViewModel.turnCount].myTurn = true
+            robotViewModel.redEnergy ++
         }else{
             for(robot in robots){
                 robot.myTurn = false
@@ -214,12 +219,22 @@ class MainActivity : ComponentActivity(){
         super.onSaveInstanceState(outState)
         // Saves as turnCount in robotViewModel in the outState bundle
         outState.putInt("turnCount", robotViewModel.turnCount)
+        outState.putInt("redEnergy", robotViewModel.redEnergy)
+        outState.putInt("whiteEnergy", robotViewModel.whiteEnergy)
+        outState.putInt("yellowEnergy", robotViewModel.yellowEnergy)
     }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         // Restores turnCount from the savedInstanceState bundle
         val savedCount = savedInstanceState.getInt("turnCount", 0)
+        val savedRedEnergy = savedInstanceState.getInt("redEnergy", 0)
+        val savedWhiteEnergy = savedInstanceState.getInt("whiteEnergy", 0)
+        val savedYellowEnergy = savedInstanceState.getInt("yellowEnergy", 0)
+
         robotViewModel.turnCount = savedCount
+        robotViewModel.redEnergy = savedRedEnergy
+        robotViewModel.whiteEnergy = savedWhiteEnergy
+        robotViewModel.yellowEnergy = savedYellowEnergy
         setRobotTurn()
         setImages()
     }
