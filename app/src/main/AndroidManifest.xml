@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoQuiz"
         tools:targetApi="31">
+
+        <!-- Main Activity, start of application -->
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,6 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Needs new activity for new RobotPurchaseActivity since we are going into new screen -->
 
         <activity
             android:name=".RobotPurchaseActivity"
