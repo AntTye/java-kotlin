@@ -6,6 +6,6 @@ import java.util.UUID
 data class Crime(
     val id:             UUID,
     val title:          String,
-    val data:           Date,
+    val date:           Date,
     val isSolved :      Boolean
 )

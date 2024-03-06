@@ -18,34 +18,7 @@ class MainActivity : ComponentActivity() {
 
 
 
-        setContent {
-            CriminalIntentTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
-        }
-
     }
 
 }
 
-@Composable
-fun Greeting(string: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $string!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CriminalIntentTheme {
-        Greeting("Android")
-    }
-}
