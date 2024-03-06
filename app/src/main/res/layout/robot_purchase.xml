@@ -5,14 +5,21 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+        <!--
+        Linear Layout with two ImageView, one TextView
+        Energy Robot and Energy Img on outside of TextView
+        -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/energy_robot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/robot_red_large"/>
+                    android:src="@drawable/robot_red_large">
+                </ImageView>
                 <TextView
                     android:id="@+id/energy_amount"
                     android:layout_width="wrap_content"
@@ -27,9 +34,10 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src = "@drawable/energy_counter">
-
                 </ImageView>
         </LinearLayout>
+
+        <!-- Divider Img for layout Clarity and Separation -->
 
         <ImageView
             android:id="@+id/divider"
@@ -37,13 +45,15 @@
             android:layout_marginTop="10dp"
             android:layout_height="10dp"
             android:src="@drawable/divider">
-
         </ImageView>
+
+        <!-- Linear Layout with Rewards [A-C] -->
 
         <LinearLayout
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/reward_a"
                     android:layout_width="wrap_content"
@@ -75,6 +85,8 @@
                     android:padding="5dp"
                     />
         </LinearLayout>
+
+        <!-- Linear Layout with static energy costs and 3 Energy Img-->
 
         <LinearLayout
             android:layout_width="250dp"
@@ -129,6 +141,9 @@
                     android:src = "@drawable/energy_counter">
                 </ImageView>
         </LinearLayout>
+
+        <!-- Linear Layout with Rewards [D-G] -->
+
         <LinearLayout
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
@@ -175,6 +190,9 @@
                     />
 
         </LinearLayout>
+
+        <!-- Linear Layout with static energy costs and 4 Energy Img-->
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -244,22 +262,23 @@
                     android:src = "@drawable/energy_counter">
                 </ImageView>
         </LinearLayout>
-        <LinearLayout
+
+        <!-- Random Reward TextView -->
+
+        <TextView
+            android:id="@+id/random_reward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:text="@string/random_reward"
+            android:textColor="@color/white"
+            android:background="@drawable/blue_background"
+            android:padding="5dp"
+            />
 
-                <TextView
-                    android:id="@+id/random_reward"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="@string/random_reward"
-                    android:textColor="@color/white"
-                    android:background="@drawable/blue_background"
-                    android:padding="5dp"
-                    />
-        </LinearLayout>
+        <!-- Linear Layout with static energy costs and 1 Energy Img-->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -279,7 +298,4 @@
                     android:src = "@drawable/energy_counter">
                 </ImageView>
         </LinearLayout>
-
-
-
 </LinearLayout>

@@ -1,11 +1,13 @@
 package com.bignerdranch.android.geoquiz
 
+// Necessary Import
 import androidx.lifecycle.ViewModel
-
-private const val TAG = "RobotViewModel"
 
 class RobotViewModel : ViewModel() {
 
+    // I used a Private backing property as data storage, it keeps the inner workings of a class hidden and controlled
+    // Ensures code interacts only through a defined interface, enhancing security and maintainability
+    // Private variable allows us to only access and modify within its class
     private var _turnCount = 0
     var turnCount: Int
         get() = _turnCount
