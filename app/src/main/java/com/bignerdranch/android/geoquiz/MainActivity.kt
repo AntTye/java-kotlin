@@ -17,10 +17,7 @@ private const val EXTRA_ROBOT_ENERGY_NEW_RED = "com.bignerdranch.android.geoquiz
 private const val EXTRA_ROBOT_ENERGY_NEW_WHITE = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_WHITE"
 private const val EXTRA_ROBOT_ENERGY_NEW_YELLOW = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_YELLOW"
 private const val EXTRA_ROBOT_ENERGY_NEW_TURN = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW_TURN"
-
-//private const val EXTRA_ROBOT_TURN = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_ENERGY_NEW"
-
-//I want to save newrobotenergy into the robot turncount was on.
+private const val EXTRA_ROBOT_PURCHASED_REWARDS = "com.bignerdranch.android.geoquiz.EXTRA_ROBOT_PURCHASED_REWARDS"
 
 class MainActivity : ComponentActivity(){
 
@@ -34,6 +31,8 @@ class MainActivity : ComponentActivity(){
     private var newRobotEnergy_White : Int = 0
     private var newRobotEnergy_Yellow : Int = 0
     private var newRobotTurn : Int = 0
+
+    private lateinit var newPurchasedRewards : MutableList<Int>
 
     private lateinit var robotImages: MutableList<ImageView>
 
@@ -53,12 +52,15 @@ class MainActivity : ComponentActivity(){
     private val robotViewModel : RobotViewModel by viewModels()
 
     companion object {
-        fun newIntent(packageContext: Context, newRobotEnergy_Red : Int, newRobotEnergy_White : Int,newRobotEnergy_Yellow : Int, newRobotTurn : Int): Intent {
+        fun newIntent(packageContext: Context,
+                      newRobotEnergy_Red : Int, newRobotEnergy_White : Int,newRobotEnergy_Yellow : Int,
+                      newRobotTurn : Int, purchaseRewards : MutableList<Int>): Intent {
             return Intent(packageContext, MainActivity::class.java).apply {
                 putExtra(EXTRA_ROBOT_ENERGY_NEW_RED, newRobotEnergy_Red)
                 putExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, newRobotEnergy_White)
                 putExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, newRobotEnergy_Yellow)
                 putExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, newRobotTurn)
+                putIntegerArrayListExtra(EXTRA_ROBOT_PURCHASED_REWARDS, ArrayList(purchaseRewards))
             }
         }
     }
@@ -85,11 +87,13 @@ class MainActivity : ComponentActivity(){
         newRobotEnergy_White = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, 0)
         newRobotEnergy_Yellow = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, 0)
         newRobotTurn = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, 0)
+        newPurchasedRewards = intent.getIntegerArrayListExtra(EXTRA_ROBOT_PURCHASED_REWARDS)?.toMutableList() ?: mutableListOf()
 
         robotViewModel.redEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_RED, 0)
         robotViewModel.whiteEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_WHITE, 0)
         robotViewModel.yellowEnergy = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_YELLOW, 0)
         robotViewModel.turnCount = intent.getIntExtra(EXTRA_ROBOT_ENERGY_NEW_TURN, 0)
+        robotViewModel.purchasedRewards = intent.getIntegerArrayListExtra(EXTRA_ROBOT_PURCHASED_REWARDS)?.toMutableList() ?: mutableListOf()
 
         red_img.setOnClickListener { view : View ->
             Toast.makeText(this, "Red Energy: ${robotViewModel.redEnergy}", Toast.LENGTH_SHORT).show()
@@ -106,23 +110,20 @@ class MainActivity : ComponentActivity(){
 
         purchaseBox.setOnClickListener {
             if (robotViewModel.turnCount ==1) {
-                //robotViewModel.redEnergy = newRobotEnergy
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount, robotViewModel.purchasedRewards)
                 startActivity(intent)
 
             }else if (robotViewModel.turnCount ==2){
-                //robotViewModel.whiteEnergy = newRobotEnergy
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount, robotViewModel.purchasedRewards)
                 startActivity(intent)
 
             }else if(robotViewModel.turnCount ==3){
-                //robotViewModel.whiteEnergy = newRobotEnergy
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount, robotViewModel.purchasedRewards)
                 startActivity(intent)
 
             }else{
                 robotViewModel.redEnergy = newRobotEnergy_Red
-                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount)
+                val intent = RobotPurchaseActivity.newIntent(this, robotViewModel.redEnergy, robotViewModel.whiteEnergy, robotViewModel.yellowEnergy, robotViewModel.turnCount, robotViewModel.purchasedRewards)
                 startActivity(intent)
             }
         }
@@ -131,7 +132,7 @@ class MainActivity : ComponentActivity(){
         setImages()
 
 
-        if (savedInstanceState != null) { // Restores turn count if available
+        if (savedInstanceState != null) {
             val savedCount = savedInstanceState.getInt("turnCount", 0)
             robotViewModel.turnCount = savedCount
         }
@@ -182,7 +183,6 @@ class MainActivity : ComponentActivity(){
                     message_box.setText(messageResources[indy])
                 }
             } else {
-                // Set a different image resource for robots when it's not their turn
                 robotImages[indy].setImageResource(robots[indy].smallImgRes)
             }
             indy++
@@ -217,24 +217,22 @@ class MainActivity : ComponentActivity(){
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Saves as turnCount in robotViewModel in the outState bundle
         outState.putInt("turnCount", robotViewModel.turnCount)
         outState.putInt("redEnergy", robotViewModel.redEnergy)
         outState.putInt("whiteEnergy", robotViewModel.whiteEnergy)
         outState.putInt("yellowEnergy", robotViewModel.yellowEnergy)
+        outState.putIntegerArrayList("purchasedRewards", ArrayList(robotViewModel.purchasedRewards))
     }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        // Restores turnCount from the savedInstanceState bundle
-        val savedCount = savedInstanceState.getInt("turnCount", 0)
-        val savedRedEnergy = savedInstanceState.getInt("redEnergy", 0)
-        val savedWhiteEnergy = savedInstanceState.getInt("whiteEnergy", 0)
-        val savedYellowEnergy = savedInstanceState.getInt("yellowEnergy", 0)
+        robotViewModel.turnCount = savedInstanceState.getInt("turnCount", 0)
+        robotViewModel.redEnergy = savedInstanceState.getInt("redEnergy", 0)
+        robotViewModel.whiteEnergy = savedInstanceState.getInt("whiteEnergy", 0)
+        robotViewModel.yellowEnergy = savedInstanceState.getInt("yellowEnergy", 0)
+        robotViewModel.purchasedRewards =
+            savedInstanceState.getIntegerArrayList("purchasedRewards")?.toMutableList() ?: mutableListOf()
 
-        robotViewModel.turnCount = savedCount
-        robotViewModel.redEnergy = savedRedEnergy
-        robotViewModel.whiteEnergy = savedWhiteEnergy
-        robotViewModel.yellowEnergy = savedYellowEnergy
         setRobotTurn()
         setImages()
     }
