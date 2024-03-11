@@ -13,13 +13,13 @@
 
 <!-- Middle Row -->
 <div style="display: flex; justify-content: center;">
-    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/YellowRobotTurn.png" alt="Yellow Robot's Turn" style="width: auto; height: auto;" />
-    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhiteRobotEnergy.png" alt="White Robot's Purchase" style="width: auto; height: auto;" />
-    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhiteRobotPurchase.png" alt="White Robot's Energy" style="width: auto; height: auto;" />
+    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/YellowRobotTurn.png" alt="Yellow Robot's Turn" style="width: 250px; height: auto;" />
+    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhiteRobotEnergy.png" alt="White Robot's Purchase" style="width: 250px; height: auto;" />
+    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhiteRobotPurchase.png" alt="White Robot's Energy" style="width: 250px; height: auto;" />
 </div>
 
 <!-- Last Row -->
 <div style="display: flex; justify-content: center;">
-    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/RedPurchaseActivity.png" alt="Red Purchase View" style="width: auto; height: auto;"/>
-    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhitePurchaseActivity.png" alt="White Purchase View" style="width: auto; height: auto;"/>
+    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/RedPurchaseActivity.png" alt="Red Purchase View" style="width: 250px; height: auto;"/>
+    <img src="https://raw.githubusercontent.com/AntTye/java-kotlin/main/Robot%20App/readMeImages/WhitePurchaseActivity.png" alt="White Purchase View" style="width: 250px; height: auto;"/>
 </div>
